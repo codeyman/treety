@@ -2,3 +2,7 @@ README
 ========
 
 Files for personal tree project for simple tree implementation.
+
+Compilation
+============
+Run make from the workspace and it should generate treetyTest executable.
