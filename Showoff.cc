@@ -17,8 +17,9 @@ void Showoff::setAtOffset(const int &x, const int &y, char c)
     assert(x <= height);
     assert(y <= width );
     bmp[x][y] = c;
+#if TEST_DEBUG
     print();
-
+#endif
 }
 
 void Showoff::setAtOffset(const int &x, const int &y, Showoff *n)
@@ -30,7 +31,9 @@ void Showoff::setAtOffset(const int &x, const int &y, Showoff *n)
         for(int j = 0; j < n->width; ++j){
             bmp[x+i][y+j]= n->bmp[i][j];
         }
+#if TEST_DEBUG
     print();
+#endif
 }
 void Showoff::setAtOffset(const int &x, const int &y, int val)
 {
@@ -39,11 +42,16 @@ void Showoff::setAtOffset(const int &x, const int &y, int val)
     std::string s = std::to_string(val);
     char c = s.at(0);
     bmp[x][y] = c;
+#if TEST_DEBUG
     print();
+#endif
 }
 
 void Showoff::print()
 {
+#if TEST_DEBUG
+    std::cout<<"h:"<<height<<" w:"<<width<<" head:"<<headLoc<<std::endl;
+#endif
     for(int i=0; i<height; ++i){
         for(int j=0; j<width; ++j)
             std::cout<<bmp[i][j];

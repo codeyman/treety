@@ -72,6 +72,11 @@ class Showoff {
             return headLoc;
         }
 
+        void setHeadLoc(int h)
+        {
+            headLoc = h;
+        }
+
 
         void setAtOffset(const int &x, const int &y, Showoff *n);
         void setAtOffset(const int &x, const int &y, char c);

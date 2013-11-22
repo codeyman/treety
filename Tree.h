@@ -19,6 +19,7 @@
  * ==================
  *
  */
+#include "Showoff.h"
 
 class Tree {
     private:
@@ -29,13 +30,9 @@ class Tree {
     public:
         Tree():_data(0),left(NULL),right(NULL),parent(NULL) {}
         Tree(int val):_data(val),left(NULL),right(NULL),parent(NULL) {}
-        Tree(int val, Tree *l, Tree *r, Tree *p):_data(val),left(l),right(r),parent(p) {}
+       // Tree(int val, Tree *l, Tree *r, Tree *p):_data(val),left(l),right(r),parent(p) {}
         Tree(int val[], int count);
-        ~Tree() 
-        {
-            if(left!=NULL) delete left;
-            if(right!=NULL) delete right;
-        }
+        ~Tree(); 
 
         /****************************************/
         // Setters and getters  
@@ -53,31 +50,8 @@ class Tree {
         //void printDFS();
         void printBFS();
         void addBST(int val);
-        //void dispTree();
+        Showoff *dispTree();
 };
-/*
-class Showoff {
-    private:
-        unsigned short hieght;
-        unsigned short width;
-        unsigned short headLoc;
-        char **bmp;
-
-    public:
-        Showoff():hieght(1),width(1),headLoc(0) 
-        {
-            bmp = new char[1][0];
-        }
-
-        ~Showoff()
-        {
-            delete bmp;
-        }
-
-        void setAtOffset(const unsigned short &x, const unsigned short &y);
-
-}
-*/
 
 #endif
 
