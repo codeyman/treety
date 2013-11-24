@@ -14,6 +14,7 @@
 #include "Tree.h"
 
 using namespace std;
+#define SEP '.'
 
 void Tree::setLeft(const int &val)
 {
@@ -80,9 +81,7 @@ Tree::Tree(int val[], int count)
     assert(count >= 1);
     _data = val[0];
     left = right = parent = NULL;
-    //cout<<"Adding "<<val[0]<<endl;
     for(;i<count;++i) {
-      //  cout<<"Adding "<<val[i]<<endl;
         addBST(val[i]);
     }
 }
@@ -108,7 +107,7 @@ Showoff* Tree::dispTree()
     int datapos = 0;
     if(left == NULL && right == NULL) {
         ret = new Showoff;
-        ret->clearbmp();
+        ret->clearbmp(SEP);
         ret->setAtOffset(0,0,this->_data); 
         return ret; 
     }
@@ -129,20 +128,15 @@ Showoff* Tree::dispTree()
         rightHead = rightS->getHeadLoc();
     }
 
+    //+1 for connectors and +1 for parent
     maxh +=2;
+
+    //+2 for left and right connectors. +1 for parent.
     maxw +=3;
 
     ret = new Showoff( maxh, maxw, (maxw)/2);
-    ret->clearbmp();
-    if(leftS) {
-        ret->setAtOffset(2,0,leftS);
-        ret->setAtOffset(1,leftHead+1,'/');
-    }
+    ret->clearbmp(SEP);
 
-    if(rightS){
-        ret->setAtOffset(1,leftw+rightHead+2,'\\');
-        ret->setAtOffset(2,leftw+3,rightS);
-    }
     if(leftS && rightS)
         datapos = (3+leftHead+rightHead+leftw)/2;
     else if (leftS)
@@ -152,6 +146,18 @@ Showoff* Tree::dispTree()
 
     ret->setAtOffset(0,datapos,_data);
     ret->setHeadLoc(datapos);
+
+
+    if(leftS) {
+        ret->setAtOffset(2,0,leftS);
+        ret->setAtOffset(1,leftHead+1,'/');
+    }
+
+    if(rightS){
+        ret->setAtOffset(1,leftw+rightHead+2,'\\');
+        ret->setAtOffset(2,leftw+3,rightS);
+    }
+
     return ret;
 
     
@@ -166,7 +172,6 @@ Tree::~Tree()
 void test(int x[],int num)
 {
     Tree *node = new Tree(x,num);
-    //node->printBFS();
     Showoff *disp = node->dispTree();
     disp->print();
     delete disp;
@@ -174,15 +179,21 @@ void test(int x[],int num)
 }
 int main(int argc,char *argv[])
 {
-    int x[]={6,3,5,1,7,8,4}; 
-    for (int i=1;i<8;++i)
-        test(x,i);
-    int y[]={1,2,3,4,5,6,7}; 
-    for (int i=1;i<8;++i)
-        test(y,i);
-    int z[]={7,6,5,4,3,2,1}; 
-    for (int i=1;i<8;++i)
-        test(z,i);
+    int x[][7]={{6,3,5,1,7,8,4}, 
+            {1,2,3,4,5,6,7}, 
+            {7,6,5,4,3,2,1},
+            {6000,3000,5000,1000,7000,8000,4000}, 
+            {10,20,30,40,50,60,70}, 
+            {700,60,50,4,3,2,1}};
+#ifndef DEBUG
+    for(int i = 0; i<6 ; ++i)
+    {
+        for(int j = 1; j<8; ++j)
+            test(x[i],j);
+    }
+#else
+    test(x[5],2);
+#endif
 }
 #endif
 /* end of Tree.cc */

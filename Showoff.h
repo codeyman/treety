@@ -25,16 +25,17 @@ class Showoff {
         int height;
         int width;
         int headLoc;
+        int headwidth;
         char **bmp;
 
     public:
-        Showoff():height(1),width(1),headLoc(0) 
+        Showoff():height(1),width(1),headLoc(0),headwidth(1)
         {
             bmp = new char*[1];
             bmp[0] = new char[1];
         }
 
-        Showoff(int h, int w, int l):height(h),width(w),headLoc(l) 
+        Showoff(int h, int w, int l):height(h),width(w),headLoc(l),headwidth(1)
         {
             bmp = new char*[h];
             for(int i=0; i<h ; ++i)
@@ -48,11 +49,27 @@ class Showoff {
             delete (bmp);
         }
 
-        void clearbmp()
+        void setWidth(int w)
+        {
+            char **bmpT = new char*[height];
+            for(int i=0; i<height ; ++i){
+                bmpT[i] = new char[w];
+                for(int j=0; j<width ;++j)
+                    bmpT[i][j] = bmp[i][j];
+            }
+            for(int i=0; i<height ; ++i)
+                delete (bmp[i]);
+            delete (bmp);
+            width = w;
+
+            bmp = bmpT;
+        }
+
+        void clearbmp( char c)
         {
             for(int i=0;i<height ;++i)
                 for(int j=0; j<width; ++j)
-                    bmp[i][j]='.';
+                    bmp[i][j]=c;
         }
 
         void print();
@@ -67,9 +84,15 @@ class Showoff {
             return width;
         }
 
+
         int getHeadLoc()
         {
             return headLoc;
+        }
+
+        int getHeadWidth()
+        {
+            return headwidth;
         }
 
         void setHeadLoc(int h)
