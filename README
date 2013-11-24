@@ -1,8 +1,9 @@
 README
 ========
-
 Files for personal tree project for simple tree implementation.
 
 Compilation
 ============
-Run make from the workspace and it should generate treetyTest executable.
+- Run "make" to compile the project.
+- Alternatively run "make debug" to compile in debug prints, but make sure Tree.cc's test stub points to the right case.
+- treetyTest will be generated in the workspace.
