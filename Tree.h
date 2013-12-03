@@ -19,7 +19,6 @@
  * ==================
  *
  */
-#include "Showoff.h"
 
 class Tree {
     private:
@@ -28,9 +27,8 @@ class Tree {
         Tree *right;
         Tree *parent;
     public:
-        Tree():_data(0),left(NULL),right(NULL),parent(NULL) {}
-        Tree(int val):_data(val),left(NULL),right(NULL),parent(NULL) {}
-       // Tree(int val, Tree *l, Tree *r, Tree *p):_data(val),left(l),right(r),parent(p) {}
+        Tree();
+        Tree(int val);
         Tree(int val[], int count);
         ~Tree(); 
 
@@ -41,16 +39,15 @@ class Tree {
         void setLeft(Tree *node);
         void setRight(Tree *node);
 
-        //Tree *getLeft();
-        //Tree *getRight();
-        //Tree *getParent();
+        Tree *getLeft();
+        Tree *getRight();
+        Tree *getParent();
+        int getData();
         /****************************************/
           
-        //void add(int val); add for avl trees
         //void printDFS();
         void printBFS();
         void addBST(int val);
-        Showoff *dispTree();
 };
 
 #endif

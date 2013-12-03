@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c -Wall -DTEST_TREE  
+CFLAGS=-c -Wall -Weffc++ -Wextra -DTEST_TREE  
 LDFLAGS=
 SOURCES=Tree.cc Showoff.cc
 OBJECTS=$(SOURCES:.cc=.o)
