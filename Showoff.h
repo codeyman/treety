@@ -11,12 +11,15 @@
 /*
  * Class Operations
  * ================
- *
+ * setWidth: frees the internal char **bmp, and allocates a new for the width.
+ * init: initialize the internal data structure. Could be called from constructor.
+ * clearbmp: clears up everything in the internal 2d array.
+ * setAtOffset: updates the internal 2d array with data. There is scope of templatization here. 
+ * getHeight/getWidth/getHeadLoc/getHeadWidth/setHeadLoc: getters and setters.
+ * 
  * Public Interfaces
  * =================
- *
- * Maintenance History
- * ==================
+ * print: the sole purpose of this class is to print tree. Everything else is private.
  *
  */
 

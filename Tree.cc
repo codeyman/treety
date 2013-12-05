@@ -2,7 +2,7 @@
  * File name:    Tree.cc
  * Date:         2013/11/13 18:46
  * Author:       Sridhar V Iyer (sridhar.v.iyer@gmail.com)
- * Description: 
+ * Description:  Tree implementation and test for Showoff and  Tree classes. 
  * 
  */
 

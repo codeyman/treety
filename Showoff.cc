@@ -2,7 +2,7 @@
  * File name:    Showoff.cc
  * Date:         2013/11/22 01:26
  * Author:       Sridhar V Iyer (sridhar.v.iyer@gmail.com)
- * Description: 
+ * Description:  Implementation of Showoff
  * 
  */
 
