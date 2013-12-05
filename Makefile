@@ -1,6 +1,6 @@
-CC=g++
-CFLAGS=-c -Wall -Weffc++ -Wextra -DTEST_TREE  
-LDFLAGS=
+CC=clang++
+CFLAGS=-c -Wall -Weffc++ -Wextra -std=c++11 -DTEST_TREE  
+LDFLAGS= -stdlib=libc++
 SOURCES=Tree.cc Showoff.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=treetyTest

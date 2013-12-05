@@ -1,7 +1,7 @@
 /*
  * File name: Tree.h
  * Date:      2013/11/13 15:47
- * Author:    Sridhar V Iyer (sridhiye@cisco.com)
+ * Author:    Sridhar V Iyer (sridhar.v.iyer@gmail.com)
  * Description: Tree node
  *
  */
@@ -19,6 +19,7 @@
  * ==================
  *
  */
+#include <vector>
 
 class Tree {
     private:
@@ -29,7 +30,7 @@ class Tree {
     public:
         Tree();
         Tree(int val);
-        Tree(int val[], int count);
+        Tree(const std::vector< int > &val, int count);
         ~Tree(); 
 
         /****************************************/

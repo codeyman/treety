@@ -1,7 +1,7 @@
 /*
  * File name:    Tree.cc
  * Date:         2013/11/13 18:46
- * Author:       Sridhar V Iyer (sridhiye@cisco.com)
+ * Author:       Sridhar V Iyer (sridhar.v.iyer@gmail.com)
  * Description: 
  * 
  */
@@ -10,11 +10,12 @@
 #include <iostream>
 #include <queue>
 #include <string>
+#include <vector>
 #include <cassert>
 #include "Tree.h"
 #include "Showoff.h"
 
-using namespace std;
+//using namespace std;
 
 /****************************************
  * Constructors & Destructor 
@@ -23,7 +24,7 @@ Tree::Tree():_data(0),left(NULL),right(NULL),parent(NULL) {}
 
 Tree::Tree(int val):_data(val),left(NULL),right(NULL),parent(NULL) {}
 
-Tree::Tree(int val[], int count)
+Tree::Tree(const std::vector< int > &val, int count)
 {
     int i=1;
     assert(count >= 1);
@@ -112,16 +113,16 @@ void Tree::setRight(Tree *node)
   
 void Tree::printBFS()
 {
-    queue<Tree *> tqueue;
+    std::queue<Tree *> tqueue;
     tqueue.push(this);
     while(!tqueue.empty()) {
         Tree *temp = tqueue.front();
         tqueue.pop();
-        cout<<" "<<temp->_data;
+        std::cout<<" "<<temp->_data;
         if(temp->left) tqueue.push(temp->left);
         if(temp->right) tqueue.push(temp->right);
     }
-    cout<<endl;
+    std::cout<<std::endl;
 }
 
 
@@ -139,40 +140,69 @@ void Tree::addBST(int val)
 }
 
 #ifdef TEST_TREE
-void test(int x[],int num)
+void test1(const std::vector<int> &x,int num)
 {
     Tree node(x,num);
     Showoff disp(&node);
     disp.print();
 }
+
+void test2(const std::vector< int > &x,const std::vector< int > &y)
+{
+    Tree node1(x,x.size());
+    Tree *node2 = new Tree(y,y.size());
+
+    Showoff disp1(&node1);
+    Showoff disp2(node2);
+
+    std::cout<<"Tree 1: \n";
+    disp1.print();
+    std::cout<<"Tree 2: \n";
+    disp2.print();
+    (node1.getLeft())->setLeft(node2);
+
+    std::cout<<"Tree merged: \n";
+
+    Showoff disp3(&node1);
+    disp3.print();
+    
+
+}
+
 int main(int argc,char *argv[])
 {
-    int testcase = 0;
+    unsigned int tc = 0;
     if (argc > 1) {
-        testcase = atoi(argv[1]);
+        tc = std::stoul(argv[1]); //C++11 specific addition
     }
-    int x[][7]={{6,3,5,1,7,8,4}, 
+
+    //C++11 allows this initialization.
+    std::vector< std::vector<int> > testcases = {{6,3,5,1,7,8,4}, 
             {1,2,3,4,5,6,7}, 
             {7,6,5,4,3,2,1},
             {6000,3000,5000,1000,7000,8000,4000}, 
             {10,20,30,40,50,60,70}, 
             {700,60,50,4,3,2,1}};
-#ifndef DEBUG
-    if (testcase <= 0 || testcase >6) {
-        for(int i = 0; i<6 ; ++i)
+
+    //Test tree creation: checks getters
+    std::cout<<"<------------- TEST SET 1: GETTER+SHOWOFF -------->\n";
+    if (tc <= 0 || tc > testcases.size()) {
+        for(std::vector< std::vector<int> >::size_type i = 0; i< testcases.size()-1 ; ++i)
         {
-            for(int j = 1; j<8; ++j)
-                test(x[i],j);
+            for(std::vector<int>::size_type j = 1; j<testcases[i].size(); ++j)
+                test1(testcases[i],j+1);
         }
     }
     else {
-        for(int j = 1; j<8; ++j)
-            test(x[testcase - 1],j);
+        for(std::vector< std::vector<int> >::size_type j = 1; j<testcases[tc -1].size(); ++j)
+            test1(testcases[tc - 1],j+1);
     }
 
-#else
-    test(x[5],2);
-#endif
+    //Test left/right set
+    std::cout<<"<------------- TEST SET 2: SETTER  -------->\n";
+    test2(testcases[0],testcases[1]);
+
+
 }
 #endif
 /* end of Tree.cc */

@@ -1,7 +1,7 @@
 /*
  * File name: Showoff.h
  * Date:      2013/11/14 17:55
- * Author:    Sridhar V Iyer (sridhiye@cisco.com)
+ * Author:    Sridhar V Iyer (sridhar.v.iyer@gmail.com)
  * Description: 
  *
  */
