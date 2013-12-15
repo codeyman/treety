@@ -27,6 +27,7 @@ class AVLTree:public Tree {
         int balanceFactor;
     public:
         AVLTree();
+        AVLTree(int val);
         virtual void insert(int val);
 };
 

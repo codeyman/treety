@@ -24,15 +24,19 @@ Tree::Tree():_data(0),left(NULL),right(NULL),parent(NULL) {}
 
 Tree::Tree(int val):_data(val),left(NULL),right(NULL),parent(NULL) {}
 
-Tree::Tree(const std::vector< int > &val, int count)
+void Tree::initTree(const std::vector< int > &val, int count)
 {
     int i=1;
     assert(count >= 1);
     _data = val[0];
     left = right = parent = NULL;
     for(;i<count;++i) {
-        addBST(val[i]);
+        insert(val[i]);
     }
+}
+void Tree::insert(int val)
+{
+    addBST(val);
 }
 
 Tree::~Tree() 
@@ -57,7 +61,7 @@ Tree *Tree::getRight()
 
 Tree *Tree::getParent()
 {
-    return right;
+    return parent;
 }
 
 int Tree::getData()
@@ -126,31 +130,21 @@ void Tree::printBFS()
 }
 
 
-void Tree::addBST(int val)
-{
-    if(val<=_data) {
-        if(left==NULL) left=new Tree(val);
-        else left->addBST(val);
-    }
-    else {
-        if(right==NULL) right=new Tree(val);
-        else right->addBST(val);
-    }
-
-}
-
 #ifdef TEST_TREE
 void test1(const std::vector<int> &x,int num)
 {
-    Tree node(x,num);
+    Tree node;
+    node.initTree(x,num);
     Showoff disp(&node);
     disp.print();
 }
 
 void test2(const std::vector< int > &x,const std::vector< int > &y)
 {
-    Tree node1(x,x.size());
-    Tree *node2 = new Tree(y,y.size());
+    Tree node1;
+    node1.initTree(x,x.size());
+    Tree *node2 = new Tree;
+    node2->initTree(y,y.size());
 
     Showoff disp1(&node1);
     Showoff disp2(node2);

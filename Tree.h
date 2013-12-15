@@ -20,6 +20,8 @@
  *
  */
 #include <vector>
+#include <exception>
+#include <iostream>
 
 class Tree {
     private:
@@ -30,8 +32,7 @@ class Tree {
     public:
         Tree();
         Tree(int val);
-        Tree(const std::vector< int > &val, int count);
-        ~Tree(); 
+        virtual ~Tree(); 
 
         /****************************************/
         // Setters and getters  
@@ -40,16 +41,67 @@ class Tree {
         void setLeft(Tree *node);
         void setRight(Tree *node);
 
+        // The derived classes should call use 
+        // dynamic_cast to get the correct pointer,
+        // else we get a compilation error.
         Tree *getLeft();
         Tree *getRight();
         Tree *getParent();
+
         int getData();
         /****************************************/
           
         //void printDFS();
+        void initTree(const std::vector< int > &val, int count);
         void printBFS();
-        void addBST(int val);
+
+        //We had to templatize this because we want the caller to 
+        //call the constructor for derived class when adding new 
+        //nodes
+        template<class T>
+        T *addBST(int val);
+
+        virtual void insert(int val);
 };
+
+template< class T = Tree>
+T* Tree::addBST(int val)
+{
+    T *node = NULL;
+    try {
+        if(val<=_data) {
+            if(left==NULL) {
+                node=new T(val);
+                node->parent = this;
+                left = node;
+                return node;
+            }
+            else 
+            {
+                return left->addBST<T>(val);
+            }
+        }
+        else {
+            if(right==NULL) {
+                node=new T(val);
+                node->parent = this;
+                right = node;
+                return node;
+            }
+            else {
+                return right->addBST<T>(val);
+            }
+        }
+    }
+    catch (std::exception &e)
+    {
+        std::cerr<<e.what()<<std::endl;
+    }
+
+    //Should never come here
+    return NULL; 
+
+}
 
 #endif
 

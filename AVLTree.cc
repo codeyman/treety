@@ -13,12 +13,24 @@
 #include <iostream>
 
 AVLTree::AVLTree():Tree(),balanceFactor(0){}
+AVLTree::AVLTree(int val):Tree(val),balanceFactor(0){}
 
 
 void AVLTree::insert(int val)
 {
+    AVLTree *node;
     std::cout<<"Calling child insert: "<<val<<std::endl;
-    addBST(val);
+    node = addBST<AVLTree>(val);
+    node->balanceFactor = 0;
+#if DEBUG 
+    AVLTree *temp = node;
+    std::cout<<"Parent links: ";
+    while(temp!=NULL) {
+        std::cout<<" "<<temp->getData();
+        temp = dynamic_cast<AVLTree *>(temp->getParent());
+    }
+    std::cout<<std::endl;
+#endif
 }
 #ifdef TEST_AVLTREE
 void test1(const std::vector<int> &x,int num)
@@ -52,6 +64,7 @@ int main(int argc,char *argv[])
                 test1(testcases[i],j+1);
         }
     }
+    else test1(testcases[tc-1], testcases[tc-1].size());
 }
 #endif
 /* end of AVLTree.cc */
