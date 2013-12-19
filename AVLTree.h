@@ -22,12 +22,17 @@
  *
  */
 
-class AVLTree:public Tree {
+class AVLTreeNode:public TreeNode {
     private:
-        int balanceFactor;
+        //int balanceFactor;
     public:
-        AVLTree();
-        AVLTree(int val);
+        int balanceFactor;
+        AVLTreeNode();
+        AVLTreeNode(int val);
+};
+
+class AVLTree:public Tree<AVLTreeNode> {
+    public:
         virtual void insert(int val);
 };
 

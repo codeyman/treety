@@ -15,31 +15,16 @@
 #include "Tree.h"
 #include "Showoff.h"
 
-//using namespace std;
 
 /****************************************
  * Constructors & Destructor 
  **************************************/
-Tree::Tree():_data(0),left(NULL),right(NULL),parent(NULL) {}
+TreeNode::TreeNode():_data(0),left(NULL),right(NULL),parent(NULL) {}
 
-Tree::Tree(int val):_data(val),left(NULL),right(NULL),parent(NULL) {}
+TreeNode::TreeNode(int val):_data(val),left(NULL),right(NULL),parent(NULL) {}
 
-void Tree::initTree(const std::vector< int > &val, int count)
-{
-    int i=1;
-    assert(count >= 1);
-    _data = val[0];
-    left = right = parent = NULL;
-    for(;i<count;++i) {
-        insert(val[i]);
-    }
-}
-void Tree::insert(int val)
-{
-    addBST(val);
-}
 
-Tree::~Tree() 
+TreeNode::~TreeNode() 
 {
     if(left!=NULL) delete left;
     if(right!=NULL) delete right;
@@ -49,37 +34,37 @@ Tree::~Tree()
   
 //Getters & Setters
 
-Tree *Tree::getLeft()
+TreeNode *TreeNode::getLeft()
 {
     return left;
 }
 
-Tree *Tree::getRight()
+TreeNode *TreeNode::getRight()
 {
     return right;
 }
 
-Tree *Tree::getParent()
+TreeNode *TreeNode::getParent()
 {
     return parent;
 }
 
-int Tree::getData()
+int TreeNode::getData()
 {
     return _data;
 }
-void Tree::setLeft(const int &val)
+void TreeNode::setLeft(const int &val)
 {
     if(left!=NULL){
         delete left;
         left = NULL;
     }
 
-    left = new Tree(val);
+    left = new TreeNode(val);
     left->parent = this;
 }
 
-void Tree::setLeft(Tree *node)
+void TreeNode::setLeft(TreeNode *node)
 {
     if(left!=NULL){
         delete left;
@@ -91,18 +76,18 @@ void Tree::setLeft(Tree *node)
 
 }
 
-void Tree::setRight(const int &val)
+void TreeNode::setRight(const int &val)
 {
     if(right!=NULL){
         delete right;
         right = NULL;
     }
 
-    right = new Tree(val);
+    right = new TreeNode(val);
     right->parent = this;
 }
 
-void Tree::setRight(Tree *node)
+void TreeNode::setRight(TreeNode *node)
 {
     if(right!=NULL){
         delete right;
@@ -115,52 +100,15 @@ void Tree::setRight(Tree *node)
 
 /****************************************/
   
-void Tree::printBFS()
-{
-    std::queue<Tree *> tqueue;
-    tqueue.push(this);
-    while(!tqueue.empty()) {
-        Tree *temp = tqueue.front();
-        tqueue.pop();
-        std::cout<<" "<<temp->_data;
-        if(temp->left) tqueue.push(temp->left);
-        if(temp->right) tqueue.push(temp->right);
-    }
-    std::cout<<std::endl;
-}
 
 
 #ifdef TEST_TREE
 void test1(const std::vector<int> &x,int num)
 {
-    Tree node;
-    node.initTree(x,num);
-    Showoff disp(&node);
+    Tree<> mytree;
+    mytree.initTree(x,num);
+    Showoff disp(mytree.getRoot());
     disp.print();
-}
-
-void test2(const std::vector< int > &x,const std::vector< int > &y)
-{
-    Tree node1;
-    node1.initTree(x,x.size());
-    Tree *node2 = new Tree;
-    node2->initTree(y,y.size());
-
-    Showoff disp1(&node1);
-    Showoff disp2(node2);
-
-    std::cout<<"Tree 1: \n";
-    disp1.print();
-    std::cout<<"Tree 2: \n";
-    disp2.print();
-    (node1.getLeft())->setLeft(node2);
-
-    std::cout<<"Tree merged: \n";
-
-    Showoff disp3(&node1);
-    disp3.print();
-    
-
 }
 
 int main(int argc,char *argv[])
@@ -183,19 +131,14 @@ int main(int argc,char *argv[])
     if (tc <= 0 || tc > testcases.size()) {
         for(std::vector< std::vector<int> >::size_type i = 0; i< testcases.size()-1 ; ++i)
         {
-            for(std::vector<int>::size_type j = 1; j<testcases[i].size(); ++j)
-                test1(testcases[i],j+1);
+            for(std::vector<int>::size_type j = 1; j<= testcases[i].size(); ++j)
+                test1(testcases[i],j);
         }
     }
     else {
         for(std::vector< std::vector<int> >::size_type j = 1; j<testcases[tc -1].size(); ++j)
             test1(testcases[tc - 1],j+1);
     }
-
-    //Test left/right set
-    std::cout<<"<------------- TEST SET 2: SETTER  -------->\n";
-    test2(testcases[0],testcases[1]);
-
 
 }
 #endif

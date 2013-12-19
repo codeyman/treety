@@ -50,7 +50,7 @@ class Showoff {
 
     public:
 
-        Showoff(Tree *node);
+        Showoff(TreeNode *node);
         ~Showoff();
         void print();
 };

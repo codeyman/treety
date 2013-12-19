@@ -27,14 +27,14 @@ Showoff::Showoff(int h, int w, int l):height(h),width(w),headLoc(l),headwidth(1)
         bmp[i] = new char[w];
 }
 
-Showoff::Showoff(Tree *node)
+Showoff::Showoff(TreeNode *node)
 {
     Showoff *leftS = NULL, *rightS = NULL;
     int maxh = 1, maxw = 1, leftw = 1;
     int leftHead = 0,rightHead = 0;
     int datapos = 0;
-    Tree *nodeL = node->getLeft();
-    Tree *nodeR = node->getRight();
+    TreeNode *nodeL = node->getLeft();
+    TreeNode *nodeR = node->getRight();
 
 
     if(nodeL == NULL && nodeR == NULL) {

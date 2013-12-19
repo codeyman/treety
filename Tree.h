@@ -1,8 +1,8 @@
 /*
- * File name: Tree.h
+ * File name: TreeNode.h
  * Date:      2013/11/13 15:47
  * Author:    Sridhar V Iyer (sridhar.v.iyer@gmail.com)
- * Description: Tree node
+ * Description: TreeNode node
  *
  */
 
@@ -22,80 +22,125 @@
 #include <vector>
 #include <exception>
 #include <iostream>
+#include <queue>
+#include <cassert>
 
-class Tree {
+class TreeNode {
     private:
         int _data;
-        Tree *left;
-        Tree *right;
-        Tree *parent;
+        TreeNode *left;
+        TreeNode *right;
+        TreeNode *parent;
     public:
-        Tree();
-        Tree(int val);
-        virtual ~Tree(); 
+        TreeNode();
+        TreeNode(int val);
+        virtual ~TreeNode(); 
 
         /****************************************/
         // Setters and getters  
         void setLeft(const int &val);
         void setRight(const int &val);
-        void setLeft(Tree *node);
-        void setRight(Tree *node);
+        void setLeft(TreeNode *node);
+        void setRight(TreeNode *node);
 
         // The derived classes should call use 
         // dynamic_cast to get the correct pointer,
         // else we get a compilation error.
-        Tree *getLeft();
-        Tree *getRight();
-        Tree *getParent();
+        TreeNode *getLeft();
+        TreeNode *getRight();
+        TreeNode *getParent();
 
         int getData();
         /****************************************/
           
-        //void printDFS();
+};
+
+template <class T = TreeNode> class Tree;
+
+template <class T>
+class Tree {
+    private:
+        T *root;
+    public:
+        Tree();
+        ~Tree() { if(!root) delete root; }
         void initTree(const std::vector< int > &val, int count);
         void printBFS();
 
         //We had to templatize this because we want the caller to 
         //call the constructor for derived class when adding new 
         //nodes
-        template<class T>
         T *addBST(int val);
+        T *getRoot() { return root;}
 
         virtual void insert(int val);
+
+
 };
 
-template< class T = Tree>
-T* Tree::addBST(int val)
+template <class T>
+Tree<T>::Tree():root(NULL){}
+
+
+template< class T >
+void Tree<T>::initTree(const std::vector< int > &val, int count)
+{
+    int i=1;
+    assert(count >= 1);
+    if(!root) root = new T(val[0]);
+    for(;i<count;++i) {
+        insert(val[i]);
+    }
+}
+
+template< class T >
+void Tree<T>::insert(int val)
+{
+    addBST(val);
+}
+
+template< class T >
+void Tree<T>::printBFS()
+{
+    std::queue<T *> tqueue;
+    tqueue.push(this);
+    while(!tqueue.empty()) {
+        T *temp = tqueue.front();
+        tqueue.pop();
+        std::cout<<" "<<temp->_data;
+        if(temp->left) tqueue.push(temp->left);
+        if(temp->right) tqueue.push(temp->right);
+    }
+    std::cout<<std::endl;
+}
+template< class T >
+T* Tree<T>::addBST(int val)
 {
     T *node = NULL;
-    try {
-        if(val<=_data) {
-            if(left==NULL) {
-                node=new T(val);
-                node->parent = this;
-                left = node;
-                return node;
+    T *tmp = NULL;
+    node = root;
+    while(node!= NULL) {
+        if(val<=node->getData()) {
+            if(node->getLeft() == NULL) {
+                tmp = new T(val);
+                node->setLeft(tmp);
+                return tmp;
             }
             else 
             {
-                return left->addBST<T>(val);
+                node = dynamic_cast<T *>(node->getLeft());
             }
         }
         else {
-            if(right==NULL) {
-                node=new T(val);
-                node->parent = this;
-                right = node;
-                return node;
+            if(node->getRight() == NULL) {
+                tmp = new T(val);
+                node->setRight(tmp);
+                return tmp;
             }
             else {
-                return right->addBST<T>(val);
+                node = dynamic_cast<T *>(node->getRight());
             }
         }
-    }
-    catch (std::exception &e)
-    {
-        std::cerr<<e.what()<<std::endl;
     }
 
     //Should never come here

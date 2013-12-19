@@ -12,32 +12,33 @@
 #include <vector>
 #include <iostream>
 
-AVLTree::AVLTree():Tree(),balanceFactor(0){}
-AVLTree::AVLTree(int val):Tree(val),balanceFactor(0){}
-
 
 void AVLTree::insert(int val)
 {
-    AVLTree *node;
+    AVLTreeNode *node;
     std::cout<<"Calling child insert: "<<val<<std::endl;
-    node = addBST<AVLTree>(val);
+    node = addBST(val);
     node->balanceFactor = 0;
 #if DEBUG 
-    AVLTree *temp = node;
+    AVLTreeNode *temp = node;
     std::cout<<"Parent links: ";
     while(temp!=NULL) {
         std::cout<<" "<<temp->getData();
-        temp = dynamic_cast<AVLTree *>(temp->getParent());
+        temp = dynamic_cast<AVLTreeNode *>(temp->getParent());
     }
     std::cout<<std::endl;
 #endif
 }
+
+AVLTreeNode::AVLTreeNode():TreeNode(),balanceFactor(0){}
+AVLTreeNode::AVLTreeNode(int val):TreeNode(val),balanceFactor(0){}
+
 #ifdef TEST_AVLTREE
 void test1(const std::vector<int> &x,int num)
 {
     AVLTree node;
     node.initTree(x,num);
-    Showoff disp(&node);
+    Showoff disp(node.getRoot());
     disp.print();
 }
 int main(int argc,char *argv[])
@@ -60,8 +61,8 @@ int main(int argc,char *argv[])
     if (tc <= 0 || tc > testcases.size()) {
         for(std::vector< std::vector<int> >::size_type i = 0; i< testcases.size()-1 ; ++i)
         {
-            for(std::vector<int>::size_type j = 1; j<testcases[i].size(); ++j)
-                test1(testcases[i],j+1);
+            for(std::vector<int>::size_type j = 1; j<=testcases[i].size(); ++j)
+                test1(testcases[i],j);
         }
     }
     else test1(testcases[tc-1], testcases[tc-1].size());
