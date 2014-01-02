@@ -8,10 +8,7 @@
 
 
 #include <iostream>
-#include <queue>
-#include <string>
 #include <vector>
-#include <cassert>
 #include "Tree.h"
 #include "Showoff.h"
 
@@ -55,47 +52,33 @@ int TreeNode::getData()
 }
 void TreeNode::setLeft(const int &val)
 {
-    if(left!=NULL){
-        delete left;
-        left = NULL;
-    }
-
     left = new TreeNode(val);
     left->parent = this;
 }
 
 void TreeNode::setLeft(TreeNode *node)
 {
-    if(left!=NULL){
-        delete left;
-        left = NULL;
-    }
-
     left = node;
-    left->parent = this;
+    if(left)
+        left->parent = this;
+}
 
+void TreeNode::setParent(TreeNode *node)
+{
+    this->parent = node;
 }
 
 void TreeNode::setRight(const int &val)
 {
-    if(right!=NULL){
-        delete right;
-        right = NULL;
-    }
-
     right = new TreeNode(val);
     right->parent = this;
 }
 
 void TreeNode::setRight(TreeNode *node)
 {
-    if(right!=NULL){
-        delete right;
-        right = NULL;
-    }
-
     right = node;
-    right->parent = this;
+    if(right)
+        right->parent = this;
 }
 
 /****************************************/

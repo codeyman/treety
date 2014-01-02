@@ -9,7 +9,6 @@
 #ifndef __AVLTREE_H__
 #define __AVLTREE_H__
 #include "Tree.h"
-#include <vector>
 /*
  * Class Operations
  * ================
@@ -23,17 +22,30 @@
  */
 
 class AVLTreeNode:public TreeNode {
-    private:
-        //int balanceFactor;
+    protected:
+        int height;
     public:
-        int balanceFactor;
+        //int height;
         AVLTreeNode();
-        AVLTreeNode(int val);
+        explicit AVLTreeNode(int val);
+        AVLTreeNode *getLeft();
+        AVLTreeNode *getRight();
+        AVLTreeNode *getParent();
+
+        void setHeight(int h);
+        int getHeight();
+        void adjustHeight();
+
 };
 
 class AVLTree:public Tree<AVLTreeNode> {
     public:
+        using Tree::Tree;
         virtual void insert(int val);
+        void rotateRight(AVLTreeNode *node);
+        void rotateLeft(AVLTreeNode *node);
+
+        void printBFS();
 };
 
 #endif

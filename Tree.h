@@ -20,7 +20,6 @@
  *
  */
 #include <vector>
-#include <exception>
 #include <iostream>
 #include <queue>
 #include <cassert>
@@ -28,12 +27,13 @@
 class TreeNode {
     private:
         int _data;
+    protected:
         TreeNode *left;
         TreeNode *right;
         TreeNode *parent;
     public:
         TreeNode();
-        TreeNode(int val);
+        explicit TreeNode(int val);
         virtual ~TreeNode(); 
 
         /****************************************/
@@ -42,6 +42,7 @@ class TreeNode {
         void setRight(const int &val);
         void setLeft(TreeNode *node);
         void setRight(TreeNode *node);
+        void setParent(TreeNode *node);
 
         // The derived classes should call use 
         // dynamic_cast to get the correct pointer,
@@ -63,7 +64,7 @@ class Tree {
         T *root;
     public:
         Tree();
-        ~Tree() { if(!root) delete root; }
+        virtual ~Tree() { if(root) delete root; }
         void initTree(const std::vector< int > &val, int count);
         void printBFS();
 
@@ -72,6 +73,7 @@ class Tree {
         //nodes
         T *addBST(int val);
         T *getRoot() { return root;}
+        void setRoot(T *node) { root = node;}
 
         virtual void insert(int val);
 
@@ -128,7 +130,7 @@ T* Tree<T>::addBST(int val)
             }
             else 
             {
-                node = dynamic_cast<T *>(node->getLeft());
+                node = node->getLeft();
             }
         }
         else {
@@ -138,7 +140,7 @@ T* Tree<T>::addBST(int val)
                 return tmp;
             }
             else {
-                node = dynamic_cast<T *>(node->getRight());
+                node = node->getRight();
             }
         }
     }
