@@ -17,20 +17,51 @@
 void AVLTree::insert(int val)
 {
     AVLTreeNode *node;
+    int lth, rth; //left & right tree heights;
+#if DEBUG 
     std::cout<<"Calling child insert: "<<val<<std::endl;
+#endif
     node = addBST(val);
     node->setHeight(0);
-//#if DEBUG 
-#if 1 
-    AVLTreeNode *temp = node;
+    AVLTreeNode *temp = node, *par;
+#if DEBUG 
     std::cout<<"Parent links: ";
+#endif
     while(temp!=NULL) {
         temp->adjustHeight();
+#if DEBUG 
         std::cout<<" "<<temp->getData()<<":"<<temp->getHeight();
-        temp = temp->getParent();
-    }
-    std::cout<<std::endl;
 #endif
+
+        par = temp->getParent();
+        int bf = temp->balanceFactor();
+
+        if(bf == 2) {
+            lth = (temp->getLeft()->getLeft())?temp->getLeft()->getLeft()->getHeight():-1;
+            rth = (temp->getLeft()->getRight())?temp->getLeft()->getRight()->getHeight():-1;
+            if(rth > lth) {
+                rotateLeft(temp->getLeft());
+            }
+            rotateRight(temp);
+                
+        } else if (bf == -2) {
+            lth = (temp->getRight()->getLeft())?temp->getRight()->getLeft()->getHeight():-1;
+            rth = (temp->getRight()->getRight())?temp->getRight()->getRight()->getHeight():-1;
+            if(lth > rth) {
+                rotateRight(temp->getRight());
+            }
+            rotateLeft(temp);
+            
+        }
+        temp = temp->getParent();
+        
+
+    }
+#if DEBUG 
+    std::cout<<std::endl;
+    Showoff disp(getRoot());
+    disp.print();
+#endif 
 }
 
 void AVLTree::rotateRight(AVLTreeNode *node)
@@ -41,7 +72,9 @@ void AVLTree::rotateRight(AVLTreeNode *node)
    temp = node->getLeft();
    tparent = node->getParent();
    if(temp) {
-       oldH = temp->getLeft()->getHeight();
+       if(temp->getLeft())
+           oldH = temp->getLeft()->getHeight();
+       else oldH = 0;
        node->setLeft(temp->getRight());
        temp->setRight(node); 
        temp->setParent(tparent);
@@ -51,6 +84,7 @@ void AVLTree::rotateRight(AVLTreeNode *node)
            else tparent->setRight(temp);
        }
        node->setHeight(oldH);
+       temp->setHeight(oldH+1);
    }
 }
 
@@ -62,7 +96,9 @@ void AVLTree::rotateLeft(AVLTreeNode *node)
    temp = node->getRight();
    tparent = node->getParent();
    if(temp) {
-       oldH = temp->getRight()->getHeight();
+       if(temp->getRight())
+           oldH = temp->getRight()->getHeight();
+       else oldH = 0;
        node->setRight(temp->getLeft());
        temp->setLeft(node); 
        temp->setParent(tparent);
@@ -73,6 +109,7 @@ void AVLTree::rotateLeft(AVLTreeNode *node)
        }
 
        node->setHeight(oldH);
+       temp->setHeight(oldH+1);
 
    }
 }
@@ -106,6 +143,14 @@ void AVLTreeNode::adjustHeight()
 
     height = std::max(lh,rh) + 1;
 }
+
+int AVLTreeNode::balanceFactor()
+{
+    int lh = (getLeft())?(getLeft()->getHeight()):-1;
+    int rh = (getRight())?(getRight()->getHeight()):-1;
+    
+    return (lh - rh);
+}
 int AVLTreeNode::getHeight()
 {
     return height;
@@ -137,29 +182,6 @@ void test1(const std::vector<int> &x,int num)
     disp.print();
     avtree.printBFS();
 
-    avtree.rotateLeft(avtree.getRoot()->getRight());
-    //avtree.rotateLeft(avtree.getRoot());
-
-    Showoff disp2(avtree.getRoot());
-    disp2.print();
-    avtree.printBFS();
-
-}
-void test2(const std::vector<int> &x,int num)
-{
-    AVLTree avtree;
-    avtree.initTree(x,num);
-
-    Showoff disp(avtree.getRoot());
-    disp.print();
-    avtree.printBFS();
-
-
-    avtree.rotateRight(avtree.getRoot());
-
-    Showoff disp2(avtree.getRoot());
-    disp2.print();
-    avtree.printBFS();
 
 }
 int main(int argc,char *argv[])
@@ -179,7 +201,6 @@ int main(int argc,char *argv[])
 
     //Test tree creation: checks getters
     std::cout<<"<------------- TEST SET 1: GETTER+SHOWOFF -------->\n";
-    /*
     if (tc <= 0 || tc > testcases.size()) {
         for(std::vector< std::vector<int> >::size_type i = 0; i< testcases.size()-1 ; ++i)
         {
@@ -188,9 +209,7 @@ int main(int argc,char *argv[])
         }
     }
     else test1(testcases[tc-1], testcases[tc-1].size());
-    */
-    test1(testcases[1], 4);
-    test2(testcases[2], 3);
+    //test1(testcases[0], 3);
 }
 #endif
 /* end of AVLTree.cc */

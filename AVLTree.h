@@ -35,6 +35,7 @@ class AVLTreeNode:public TreeNode {
         void setHeight(int h);
         int getHeight();
         void adjustHeight();
+        int balanceFactor();
 
 };
 
