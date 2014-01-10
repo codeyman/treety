@@ -22,6 +22,7 @@ void AVLTree::insert(int val)
     std::cout<<"Calling child insert: "<<val<<std::endl;
 #endif
     node = addBST(val);
+    if(!node) return; //Entry was already present.
     node->setHeight(0);
     AVLTreeNode *temp = node, *par;
 #if DEBUG 

@@ -24,6 +24,18 @@
 #include <queue>
 #include <cassert>
 
+class TreeNode;
+
+//Specialize this function if key/data changes.
+template<class N = TreeNode>
+void swapNodeData(N* node1, N* node2)
+{
+    int tmp;
+    tmp = node2->_data;
+    node2->_data = node1->_data;
+    node1->_data = tmp;
+}
+
 class TreeNode {
     private:
         int _data;
@@ -38,8 +50,6 @@ class TreeNode {
 
         /****************************************/
         // Setters and getters  
-        void setLeft(const int &val);
-        void setRight(const int &val);
         void setLeft(TreeNode *node);
         void setRight(TreeNode *node);
         void setParent(TreeNode *node);
@@ -53,6 +63,10 @@ class TreeNode {
 
         int getData();
         /****************************************/
+
+        template <class N>
+        friend void swapNodeData( N* node1,  N* node2);
+    
           
 };
 
@@ -73,6 +87,9 @@ class Tree {
         //nodes
         T *addBST(int val);
         T *getRoot() { return root;}
+        T *find(int val);
+        virtual void delBST(int val);
+        T *delnode(T *node);
         void setRoot(T *node) { root = node;}
 
         virtual void insert(int val);
@@ -122,7 +139,7 @@ T* Tree<T>::addBST(int val)
     T *tmp = NULL;
     node = root;
     while(node!= NULL) {
-        if(val<=node->getData()) {
+        if(val < node->getData()) {
             if(node->getLeft() == NULL) {
                 tmp = new T(val);
                 node->setLeft(tmp);
@@ -133,7 +150,7 @@ T* Tree<T>::addBST(int val)
                 node = node->getLeft();
             }
         }
-        else {
+        else if (val > node->getData()) {
             if(node->getRight() == NULL) {
                 tmp = new T(val);
                 node->setRight(tmp);
@@ -143,6 +160,79 @@ T* Tree<T>::addBST(int val)
                 node = node->getRight();
             }
         }
+        else return NULL; //don't want duplicates
+    }
+
+    //Should never come here
+    return NULL; 
+
+}
+
+template< class T>
+T* Tree<T>::delnode(T* node)
+{
+   if(!node) return NULL;
+   T* par;
+   T* tmpnode;
+   par = node->getParent();
+
+   //if the node has no children
+   if (node->getRight() && node->getLeft()) {
+       tmpnode = node->getRight();
+       while(tmpnode->getLeft() != NULL) {
+           tmpnode = tmpnode->getLeft();
+       }
+       swapNodeData(tmpnode,node);
+       return delnode(tmpnode);
+
+   }
+   else {
+       if(node->getRight() != NULL) 
+           tmpnode = node->getRight();
+       else
+           tmpnode = node->getLeft();
+       if(par) {
+           if(par->getLeft() == node) {
+               par->setLeft(tmpnode);
+           }
+           else {
+               par->setRight(tmpnode);
+           }
+       }
+       else {
+           root = tmpnode;
+           if(tmpnode)
+               tmpnode->setParent(NULL);
+           node->setRight(NULL);
+           node->setLeft(NULL);
+           delete node;
+           return NULL; 
+       }
+
+       return par;
+   }
+}
+
+template< class T >
+void Tree<T>::delBST(int val)
+{
+   T* node = find(val);
+   delnode(node);
+}
+
+template< class T >
+T* Tree<T>::find(int val)
+{
+    T *node = NULL;
+    node = root;
+    while(node!= NULL) {
+        if(val < node->getData()) {
+            node = node->getLeft();
+        }
+        else if (val > node->getData()) {
+            node = node->getRight();
+        }
+        else return node;
     }
 
     //Should never come here

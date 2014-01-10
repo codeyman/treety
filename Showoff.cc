@@ -33,6 +33,10 @@ Showoff::Showoff(TreeNode *node)
     int maxh = 1, maxw = 1, leftw = 1;
     int leftHead = 0,rightHead = 0;
     int datapos = 0;
+    if(!node) {
+        init(0,0,0,0);
+        return;
+    }
     TreeNode *nodeL = node->getLeft();
     TreeNode *nodeR = node->getRight();
 

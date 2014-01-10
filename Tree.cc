@@ -50,11 +50,6 @@ int TreeNode::getData()
 {
     return _data;
 }
-void TreeNode::setLeft(const int &val)
-{
-    left = new TreeNode(val);
-    left->parent = this;
-}
 
 void TreeNode::setLeft(TreeNode *node)
 {
@@ -66,12 +61,6 @@ void TreeNode::setLeft(TreeNode *node)
 void TreeNode::setParent(TreeNode *node)
 {
     this->parent = node;
-}
-
-void TreeNode::setRight(const int &val)
-{
-    right = new TreeNode(val);
-    right->parent = this;
 }
 
 void TreeNode::setRight(TreeNode *node)
@@ -94,6 +83,56 @@ void test1(const std::vector<int> &x,int num)
     disp.print();
 }
 
+void test2(const std::vector<int> &x, int search)
+{
+    Tree<> mytree;
+    mytree.initTree(x,x.size());
+    TreeNode *node = mytree.find(search);
+    if(node) std::cout<<"Found "<<search<<std::endl;
+    else std::cout<<"Not Found "<<search<<std::endl;
+}
+
+void test3(const std::vector<int> &x,int num)
+{
+    Tree<> mytree;
+    mytree.initTree(x,num);
+    Showoff disp(mytree.getRoot());
+    disp.print();
+
+    mytree.delBST(6);
+    Showoff disp1(mytree.getRoot());
+    disp1.print();
+
+    mytree.delBST(3);
+    Showoff disp2(mytree.getRoot());
+    disp2.print();
+
+    mytree.delBST(4);
+    Showoff disp3(mytree.getRoot());
+    disp3.print();
+
+    mytree.delBST(5);
+    Showoff disp4(mytree.getRoot());
+    disp4.print();
+
+    mytree.delBST(1);
+    Showoff disp5(mytree.getRoot());
+    disp5.print();
+
+    mytree.delBST(9);
+    Showoff disp6(mytree.getRoot());
+    disp6.print();
+
+
+    mytree.delBST(7);
+    Showoff disp7(mytree.getRoot());
+    disp7.print();
+
+
+    mytree.delBST(8);
+    Showoff disp8(mytree.getRoot());
+    disp8.print();
+}
 int main(int argc,char *argv[])
 {
     unsigned int tc = 0;
@@ -110,6 +149,7 @@ int main(int argc,char *argv[])
             {700,60,50,4,3,2,1}};
 
     //Test tree creation: checks getters
+    /*
     std::cout<<"<------------- TEST SET 1: GETTER+SHOWOFF -------->\n";
     if (tc <= 0 || tc > testcases.size()) {
         for(std::vector< std::vector<int> >::size_type i = 0; i< testcases.size()-1 ; ++i)
@@ -122,6 +162,16 @@ int main(int argc,char *argv[])
         for(std::vector< std::vector<int> >::size_type j = 1; j<testcases[tc -1].size(); ++j)
             test1(testcases[tc - 1],j+1);
     }
+*/
+    test3(testcases[0],7);
+    test2(testcases[0],6);
+    test2(testcases[0],5);
+    test2(testcases[0],1);
+    test2(testcases[0],2);
+    test2(testcases[0],2);
+    test2(testcases[0],8);
+    test2(testcases[0],4);
+    test2(testcases[0],0);
 
 }
 #endif
