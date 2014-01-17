@@ -99,37 +99,37 @@ void test3(const std::vector<int> &x,int num)
     Showoff disp(mytree.getRoot());
     disp.print();
 
-    mytree.delBST(6);
+    mytree.remove(6);
     Showoff disp1(mytree.getRoot());
     disp1.print();
 
-    mytree.delBST(3);
+    mytree.remove(3);
     Showoff disp2(mytree.getRoot());
     disp2.print();
 
-    mytree.delBST(4);
+    mytree.remove(4);
     Showoff disp3(mytree.getRoot());
     disp3.print();
 
-    mytree.delBST(5);
+    mytree.remove(5);
     Showoff disp4(mytree.getRoot());
     disp4.print();
 
-    mytree.delBST(1);
+    mytree.remove(1);
     Showoff disp5(mytree.getRoot());
     disp5.print();
 
-    mytree.delBST(9);
+    mytree.remove(9);
     Showoff disp6(mytree.getRoot());
     disp6.print();
 
 
-    mytree.delBST(7);
+    mytree.remove(7);
     Showoff disp7(mytree.getRoot());
     disp7.print();
 
 
-    mytree.delBST(8);
+    mytree.remove(8);
     Showoff disp8(mytree.getRoot());
     disp8.print();
 }
@@ -149,7 +149,6 @@ int main(int argc,char *argv[])
             {700,60,50,4,3,2,1}};
 
     //Test tree creation: checks getters
-    /*
     std::cout<<"<------------- TEST SET 1: GETTER+SHOWOFF -------->\n";
     if (tc <= 0 || tc > testcases.size()) {
         for(std::vector< std::vector<int> >::size_type i = 0; i< testcases.size()-1 ; ++i)
@@ -162,7 +161,6 @@ int main(int argc,char *argv[])
         for(std::vector< std::vector<int> >::size_type j = 1; j<testcases[tc -1].size(); ++j)
             test1(testcases[tc - 1],j+1);
     }
-*/
     test3(testcases[0],7);
     test2(testcases[0],6);
     test2(testcases[0],5);

@@ -22,7 +22,7 @@
  */
 
 class AVLTreeNode:public TreeNode {
-    protected:
+    private:
         int height;
     public:
         //int height;
@@ -37,15 +37,25 @@ class AVLTreeNode:public TreeNode {
         void adjustHeight();
         int balanceFactor();
 
+        template <class N>
+        friend void swapNodeData( N* node1,  N* node2);
+
 };
 
 class AVLTree:public Tree<AVLTreeNode> {
+    private:
+        void rotateRight(AVLTreeNode *node);
+        void rotateLeft(AVLTreeNode *node);
+        void rebalanceAncestors(AVLTreeNode *node);
+        int height_i(AVLTreeNode *node);
+
     public:
         using Tree::Tree;
         virtual void insert(int val);
-        void rotateRight(AVLTreeNode *node);
-        void rotateLeft(AVLTreeNode *node);
+        virtual void remove(int val);
 
+        void show();
+        void verifyHeight(); //only for debugging
         void printBFS();
 };
 

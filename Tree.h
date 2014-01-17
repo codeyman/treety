@@ -27,13 +27,10 @@
 class TreeNode;
 
 //Specialize this function if key/data changes.
-template<class N = TreeNode>
+template<class N>
 void swapNodeData(N* node1, N* node2)
 {
-    int tmp;
-    tmp = node2->_data;
-    node2->_data = node1->_data;
-    node1->_data = tmp;
+    std::swap(node1->_data, node2->_data);
 }
 
 class TreeNode {
@@ -88,11 +85,12 @@ class Tree {
         T *addBST(int val);
         T *getRoot() { return root;}
         T *find(int val);
-        virtual void delBST(int val);
+        T *delBST(int val);
         T *delnode(T *node);
         void setRoot(T *node) { root = node;}
 
         virtual void insert(int val);
+        virtual void remove(int val);
 
 
 };
@@ -116,6 +114,12 @@ template< class T >
 void Tree<T>::insert(int val)
 {
     addBST(val);
+}
+
+template< class T >
+void Tree<T>::remove(int val)
+{
+    delBST(val);
 }
 
 template< class T >
@@ -214,10 +218,10 @@ T* Tree<T>::delnode(T* node)
 }
 
 template< class T >
-void Tree<T>::delBST(int val)
+T* Tree<T>::delBST(int val)
 {
    T* node = find(val);
-   delnode(node);
+   return delnode(node);
 }
 
 template< class T >

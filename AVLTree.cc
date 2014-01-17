@@ -13,28 +13,44 @@
 #include <iostream>
 #include <algorithm>
 
-
-void AVLTree::insert(int val)
+void AVLTree::verifyHeight()
 {
-    AVLTreeNode *node;
-    int lth, rth; //left & right tree heights;
-#if DEBUG 
-    std::cout<<"Calling child insert: "<<val<<std::endl;
-#endif
-    node = addBST(val);
-    if(!node) return; //Entry was already present.
-    node->setHeight(0);
-    AVLTreeNode *temp = node, *par;
-#if DEBUG 
-    std::cout<<"Parent links: ";
-#endif
-    while(temp!=NULL) {
-        temp->adjustHeight();
-#if DEBUG 
-        std::cout<<" "<<temp->getData()<<":"<<temp->getHeight();
-#endif
+    std::queue<AVLTreeNode *> tqueue;
+    if(getRoot() == NULL) {
+        return;
+    }
+    tqueue.push(getRoot());
+    while(!tqueue.empty()) {
+        AVLTreeNode *temp = tqueue.front();
+        tqueue.pop();
+        int h=height_i(temp);
+        if(temp->getHeight() != h){
+            std::cout<<"issue is "<<temp->getData()<<" sheight:"<<temp->getHeight()<<" rh:"<<h<<std::endl;
+            show();
+        }
+        assert(temp->getHeight() == h);
+        if(temp->getLeft()) tqueue.push(temp->getLeft());
+        if(temp->getRight()) tqueue.push(temp->getRight());
+    }
+}
 
-        par = temp->getParent();
+
+int AVLTree::height_i(AVLTreeNode *node){
+    int lh,rh;
+    if(!node) return -1;
+    lh = height_i(node->getLeft());
+    rh = height_i(node->getRight());
+    return std::max(lh,rh)+1;
+}
+void AVLTree::rebalanceAncestors(AVLTreeNode *a_node)
+{
+    AVLTreeNode *temp = a_node;
+    int lth, rth;
+    bool rebalanced = false;
+
+    while(temp!=NULL && !rebalanced) {
+        temp->adjustHeight();
+
         int bf = temp->balanceFactor();
 
         if(bf == 2) {
@@ -44,6 +60,7 @@ void AVLTree::insert(int val)
                 rotateLeft(temp->getLeft());
             }
             rotateRight(temp);
+//            rebalanced = true;
                 
         } else if (bf == -2) {
             lth = (temp->getRight()->getLeft())?temp->getRight()->getLeft()->getHeight():-1;
@@ -52,30 +69,63 @@ void AVLTree::insert(int val)
                 rotateRight(temp->getRight());
             }
             rotateLeft(temp);
+//            rebalanced = true;
             
         }
+        temp->adjustHeight();
         temp = temp->getParent();
         
-
     }
-#if DEBUG 
-    std::cout<<std::endl;
+}
+void AVLTree::remove(int val)
+{
+    AVLTreeNode *par;
+
+#if DEBUG
+    std::cout<<"Calling child del: "<<val<<std::endl;
+#endif 
+    par = delBST(val);
+    if(!par) return;
+
+    rebalanceAncestors(par);
+}
+
+void AVLTree::show()
+{
     Showoff disp(getRoot());
     disp.print();
-#endif 
+    printBFS();
+}
+void AVLTree::insert(int val)
+{
+    AVLTreeNode *node;
+
+#if DEBUG 
+    std::cout<<"Calling child insert: "<<val<<std::endl;
+#endif
+
+    node = addBST(val);
+    if(!node) return; //Entry was already present.
+    node->setHeight(0);
+
+    rebalanceAncestors(node);
+#if DEBUG 
+    verifyHeight();
+#endif
 }
 
 void AVLTree::rotateRight(AVLTreeNode *node)
 {
-   int oldH = 0;
+   int oldLH = 0;
+   int oldRH = 0;
+   int maxold;
    if(!node) return;
    AVLTreeNode *temp,*tparent;
    temp = node->getLeft();
    tparent = node->getParent();
    if(temp) {
-       if(temp->getLeft())
-           oldH = temp->getLeft()->getHeight();
-       else oldH = 0;
+       oldLH = (temp->getLeft())?temp->getLeft()->getHeight():0;
+       oldRH = (node->getRight())?node->getRight()->getHeight():-1;
        node->setLeft(temp->getRight());
        temp->setRight(node); 
        temp->setParent(tparent);
@@ -84,22 +134,25 @@ void AVLTree::rotateRight(AVLTreeNode *node)
            if((tparent->getLeft())==node) tparent->setLeft(temp);
            else tparent->setRight(temp);
        }
-       node->setHeight(oldH);
-       temp->setHeight(oldH+1);
+       maxold = std::max(oldLH,oldRH+1);
+
+       node->setHeight(maxold);
+       temp->setHeight(maxold+1);
    }
 }
 
 void AVLTree::rotateLeft(AVLTreeNode *node)
 {
-   int oldH = 0;
+   int oldLH = 0;
+   int oldRH = 0;
+   int maxold;
    if(!node) return;
    AVLTreeNode *temp,*tparent;
    temp = node->getRight();
    tparent = node->getParent();
    if(temp) {
-       if(temp->getRight())
-           oldH = temp->getRight()->getHeight();
-       else oldH = 0;
+       oldLH = (node->getLeft())?node->getLeft()->getHeight():-1;
+       oldRH = (temp->getRight())?temp->getRight()->getHeight():0;
        node->setRight(temp->getLeft());
        temp->setLeft(node); 
        temp->setParent(tparent);
@@ -108,9 +161,10 @@ void AVLTree::rotateLeft(AVLTreeNode *node)
            if(tparent->getRight()==node) tparent->setRight(temp);
            else tparent->setLeft(temp);
        }
+       maxold = std::max(oldLH+1,oldRH);
 
-       node->setHeight(oldH);
-       temp->setHeight(oldH+1);
+       node->setHeight(maxold);
+       temp->setHeight(maxold+1);
 
    }
 }
@@ -118,6 +172,10 @@ void AVLTree::rotateLeft(AVLTreeNode *node)
 void AVLTree::printBFS()
 {
     std::queue<AVLTreeNode *> tqueue;
+    if(getRoot() == NULL) {
+        std::cout<<"Empty Tree"<<std::endl;
+        return;
+    }
     tqueue.push(getRoot());
     while(!tqueue.empty()) {
         AVLTreeNode *temp = tqueue.front();
@@ -179,11 +237,73 @@ void test1(const std::vector<int> &x,int num)
     AVLTree avtree;
     avtree.initTree(x,num);
 
-    Showoff disp(avtree.getRoot());
-    disp.print();
-    avtree.printBFS();
+    avtree.show();
 
 
+}
+void test3(const std::vector<int> &x,int num)
+{
+    AVLTree mytree;
+    mytree.initTree(x,num);
+    mytree.show();
+
+    mytree.remove(5);
+    mytree.show();
+
+    mytree.remove(3);
+    mytree.show();
+
+    mytree.remove(4);
+    mytree.show();
+
+    mytree.remove(1);
+    mytree.show();
+
+    mytree.remove(6);
+    mytree.show();
+
+    mytree.remove(9);
+    mytree.show();
+
+
+    mytree.remove(7);
+    mytree.show();
+
+
+    mytree.remove(8);
+    mytree.show();
+}
+
+int myrandom (int i) { return std::rand()%i;}
+
+void longTest_helper(std::vector<int>& vec)
+{
+    AVLTree mytree;
+    //create a random tree
+    mytree.initTree(vec,vec.size());
+    mytree.verifyHeight();
+
+
+    //delete random number of elements in random order
+    int numdel = std::rand()%(vec.size());
+    std::random_shuffle(vec.begin(), vec.end(),myrandom);
+    for(int i=0; i<numdel; ++i){
+        mytree.remove(vec[i]);
+    }
+
+    mytree.verifyHeight();
+
+}
+void longTest()
+{
+    std::vector<int> x;
+    for(int i=0;i<1000;++i)
+        x.push_back(i);
+
+    for(int i=0; i<10000; ++i){
+        std::random_shuffle(x.begin(), x.end(),myrandom);
+        longTest_helper(x);
+    }
 }
 int main(int argc,char *argv[])
 {
@@ -201,7 +321,7 @@ int main(int argc,char *argv[])
             {700,60,50,4,3,2,1}};
 
     //Test tree creation: checks getters
-    std::cout<<"<------------- TEST SET 1: GETTER+SHOWOFF -------->\n";
+    std::cout<<"<------------- TEST 1: INSERT -------->\n";
     if (tc <= 0 || tc > testcases.size()) {
         for(std::vector< std::vector<int> >::size_type i = 0; i< testcases.size()-1 ; ++i)
         {
@@ -210,7 +330,12 @@ int main(int argc,char *argv[])
         }
     }
     else test1(testcases[tc-1], testcases[tc-1].size());
-    //test1(testcases[0], 3);
+
+    std::cout<<"<------------- TEST 2: DELETES -------->\n";
+    test3(testcases[0], 7);
+    std::cout<<"<------------- TEST 3: LONG TEST -------->\n";
+    std::cout<<" Failure will cause a crash here \n";
+    longTest();
 }
 #endif
 /* end of AVLTree.cc */
