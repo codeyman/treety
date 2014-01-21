@@ -29,6 +29,7 @@ void AVLTree::verifyHeight()
             show();
         }
         assert(temp->getHeight() == h);
+        assert(temp->balanceFactor() >= -1 || temp->balanceFactor() <=1 );
         if(temp->getLeft()) tqueue.push(temp->getLeft());
         if(temp->getRight()) tqueue.push(temp->getRight());
     }
@@ -300,10 +301,12 @@ void longTest()
     for(int i=0;i<1000;++i)
         x.push_back(i);
 
+    std::cout<<" Failure will cause a crash here \n";
     for(int i=0; i<10000; ++i){
         std::random_shuffle(x.begin(), x.end(),myrandom);
         longTest_helper(x);
     }
+    std::cout<<" Test passed \n";
 }
 int main(int argc,char *argv[])
 {
@@ -334,7 +337,6 @@ int main(int argc,char *argv[])
     std::cout<<"<------------- TEST 2: DELETES -------->\n";
     test3(testcases[0], 7);
     std::cout<<"<------------- TEST 3: LONG TEST -------->\n";
-    std::cout<<" Failure will cause a crash here \n";
     longTest();
 }
 #endif
