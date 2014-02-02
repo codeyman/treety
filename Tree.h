@@ -143,7 +143,7 @@ T* Tree<T>::addBST(int val)
     T *tmp = NULL;
     node = root;
     while(node!= NULL) {
-        if(val < node->getData()) {
+        if(val <= node->getData()) {
             if(node->getLeft() == NULL) {
                 tmp = new T(val);
                 node->setLeft(tmp);

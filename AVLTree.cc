@@ -298,8 +298,8 @@ void longTest_helper(std::vector<int>& vec)
 void longTest()
 {
     std::vector<int> x;
-    for(int i=0;i<1000;++i)
-        x.push_back(i);
+    for(int i=1;i<=1000;++i)
+        x.push_back(myrandom(i));
 
     std::cout<<" Failure will cause a crash here \n";
     for(int i=0; i<10000; ++i){
@@ -319,6 +319,8 @@ int main(int argc,char *argv[])
     std::vector< std::vector<int> > testcases = {{6,3,5,1,7,8,4}, 
             {1,2,3,4,5,6,7}, 
             {7,6,5,4,3,2,1},
+            {7,6,5,6,7,5,4,6,1,8,9,10},
+            {7,7,7,7,7,7,7},
             {6000,3000,5000,1000,7000,8000,4000}, 
             {10,20,30,40,50,60,70}, 
             {700,60,50,4,3,2,1}};
